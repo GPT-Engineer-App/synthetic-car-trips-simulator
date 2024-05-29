@@ -3,11 +3,11 @@ import { Box, Button, Container, Flex, IconButton, Text, VStack } from "@chakra-
 import { FaHome, FaStore, FaRoad, FaCar } from "react-icons/fa";
 
 const generateRandomMap = () => {
-  const houses = Array.from({ length: 3 }, (_, i) => ({ id: `house-${i}`, type: "house", icon: FaHome }));
+  const houses = Array.from({ length: 3 }, (_, i) => ({ id: `house-${i}`, type: "house", icon: FaHome, x: Math.random() * 80, y: Math.random() * 80 }));
   const destinations = [
-    { id: "grocery", type: "destination", icon: FaStore },
-    { id: "bank", type: "destination", icon: FaStore },
-    { id: "restaurant", type: "destination", icon: FaStore },
+    { id: "grocery", type: "destination", icon: FaStore, x: Math.random() * 80, y: Math.random() * 80 },
+    { id: "bank", type: "destination", icon: FaStore, x: Math.random() * 80, y: Math.random() * 80 },
+    { id: "restaurant", type: "destination", icon: FaStore, x: Math.random() * 80, y: Math.random() * 80 },
   ];
   const roads = [
     { from: "house-0", to: "grocery" },
@@ -50,11 +50,16 @@ const Index = () => {
           Simulate Trip
         </Button>
         <Box width="100%" height="400px" border="1px solid black" position="relative">
+          {map.roads.map((road, index) => {
+            const from = map.houses.find((house) => house.id === road.from) || map.destinations.find((destination) => destination.id === road.from);
+            const to = map.houses.find((house) => house.id === road.to) || map.destinations.find((destination) => destination.id === road.to);
+            return <Box key={index} position="absolute" top={`${from.y}%`} left={`${from.x}%`} width={`${Math.abs(to.x - from.x)}%`} height="2px" backgroundColor="gray" transform={`rotate(${Math.atan2(to.y - from.y, to.x - from.x) * (180 / Math.PI)}deg)`} transformOrigin="top left" />;
+          })}
           {map.houses.map((house) => (
-            <IconButton key={house.id} aria-label={house.id} icon={<house.icon />} position="absolute" top={`${Math.random() * 80}%`} left={`${Math.random() * 80}%`} />
+            <IconButton key={house.id} aria-label={house.id} icon={<house.icon />} position="absolute" top={`${house.y}%`} left={`${house.x}%`} />
           ))}
           {map.destinations.map((destination) => (
-            <IconButton key={destination.id} aria-label={destination.id} icon={<destination.icon />} position="absolute" top={`${Math.random() * 80}%`} left={`${Math.random() * 80}%`} />
+            <IconButton key={destination.id} aria-label={destination.id} icon={<destination.icon />} position="absolute" top={`${destination.y}%`} left={`${destination.x}%`} />
           ))}
           {trip && (
             <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" color="red">
