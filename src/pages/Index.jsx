@@ -49,7 +49,7 @@ const Index = () => {
         <Button onClick={handleSimulateTrip} colorScheme="blue">
           Simulate Trip
         </Button>
-        <Box width="100%" height="400px" border="1px solid black" position="relative">
+        <Box width="150%" height="400px" border="1px solid black" position="relative">
           {map.roads.map((road, index) => {
             const from = map.houses.find((house) => house.id === road.from) || map.destinations.find((destination) => destination.id === road.from);
             const to = map.houses.find((house) => house.id === road.to) || map.destinations.find((destination) => destination.id === road.to);
