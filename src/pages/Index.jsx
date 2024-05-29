@@ -3,11 +3,11 @@ import { Box, Button, Container, Flex, IconButton, Text, VStack } from "@chakra-
 import { FaHome, FaStore, FaRoad, FaCar } from "react-icons/fa";
 
 const generateRandomMap = () => {
-  const houses = Array.from({ length: 3 }, (_, i) => ({ id: `house-${i}`, type: "house", icon: FaHome, x: Math.random() * 80, y: Math.random() * 80 }));
+  const houses = Array.from({ length: 3 }, (_, i) => ({ id: `house-${i}`, type: "house", icon: FaHome, x: Math.random() * 80, y: i * 20 }));
   const destinations = [
-    { id: "grocery", type: "destination", icon: FaStore, x: Math.random() * 80, y: Math.random() * 80 },
-    { id: "bank", type: "destination", icon: FaStore, x: Math.random() * 80, y: Math.random() * 80 },
-    { id: "restaurant", type: "destination", icon: FaStore, x: Math.random() * 80, y: Math.random() * 80 },
+    { id: "grocery", type: "destination", icon: FaStore, x: 80, y: 0 },
+    { id: "bank", type: "destination", icon: FaStore, x: 80, y: 20 },
+    { id: "restaurant", type: "destination", icon: FaStore, x: 80, y: 40 },
   ];
   const roads = [
     { from: "house-0", to: "grocery" },
@@ -53,7 +53,7 @@ const Index = () => {
           {map.roads.map((road, index) => {
             const from = map.houses.find((house) => house.id === road.from) || map.destinations.find((destination) => destination.id === road.from);
             const to = map.houses.find((house) => house.id === road.to) || map.destinations.find((destination) => destination.id === road.to);
-            return <Box key={index} position="absolute" top={`${from.y}%`} left={`${from.x}%`} width={`${Math.abs(to.x - from.x)}%`} height="2px" backgroundColor="gray" transform={`rotate(${Math.atan2(to.y - from.y, to.x - from.x) * (180 / Math.PI)}deg)`} transformOrigin="top left" />;
+            return <Box key={index} position="absolute" top={`${Math.min(from.y, to.y)}%`} left={`${Math.min(from.x, to.x)}%`} width={from.x === to.x ? "2px" : `${Math.abs(to.x - from.x)}%`} height={from.y === to.y ? "2px" : `${Math.abs(to.y - from.y)}%`} backgroundColor="gray" />;
           })}
           {map.houses.map((house) => (
             <IconButton key={house.id} aria-label={house.id} icon={<house.icon />} position="absolute" top={`${house.y}%`} left={`${house.x}%`} />
