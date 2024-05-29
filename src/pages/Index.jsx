@@ -10,12 +10,12 @@ const generateRandomMap = () => {
     { id: "restaurant", type: "destination", icon: FaStore, x: 80, y: 40 },
   ];
   const roads = [
-    { from: "house-0", to: "grocery" },
-    { from: "house-1", to: "bank" },
-    { from: "house-2", to: "restaurant" },
-    { from: "grocery", to: "house-0" },
-    { from: "bank", to: "house-1" },
-    { from: "restaurant", to: "house-2" },
+    { from: "house-0", to: "grocery", vertical: false },
+    { from: "house-1", to: "bank", vertical: true },
+    { from: "house-2", to: "restaurant", vertical: false },
+    { from: "grocery", to: "house-0", vertical: false },
+    { from: "bank", to: "house-1", vertical: true },
+    { from: "restaurant", to: "house-2", vertical: false },
   ];
   return { houses, destinations, roads };
 };
@@ -53,7 +53,7 @@ const Index = () => {
           {map.roads.map((road, index) => {
             const from = map.houses.find((house) => house.id === road.from) || map.destinations.find((destination) => destination.id === road.from);
             const to = map.houses.find((house) => house.id === road.to) || map.destinations.find((destination) => destination.id === road.to);
-            return <Box key={index} position="absolute" top={`${Math.min(from.y, to.y)}%`} left={`${Math.min(from.x, to.x)}%`} width={from.x === to.x ? "2px" : `${Math.abs(to.x - from.x)}%`} height={from.y === to.y ? "2px" : `${Math.abs(to.y - from.y)}%`} backgroundColor="gray" />;
+            return <Box key={index} position="absolute" top={`${Math.min(from.y, to.y)}%`} left={`${Math.min(from.x, to.x)}%`} width={road.vertical ? "2px" : `${Math.abs(to.x - from.x)}%`} height={road.vertical ? `${Math.abs(to.y - from.y)}%` : "2px"} backgroundColor="gray" />;
           })}
           {map.houses.map((house) => (
             <IconButton key={house.id} aria-label={house.id} icon={<house.icon />} position="absolute" top={`${house.y}%`} left={`${house.x}%`} />
